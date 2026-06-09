@@ -1,4 +1,4 @@
-const SUPPORTED_LANGUAGES = ["zh", "en", "fr", "de", "it", "es"];
+const SUPPORTED_LANGUAGES = ["zh", "en", "fr", "de", "it", "es", "ja", "ko", "ru"];
 
 const UI = {
   zh: {
@@ -120,6 +120,66 @@ const UI = {
     tldAll: "Todos los TLD",
     tldFilter: "TLD",
     loadError: "No se pudieron cargar los datos. Funcionará en GitHub Pages; para vista local usa un servidor estático."
+  },
+  ja: {
+    searchPlaceholder: "ドメインを検索、例: google、cloud、edu",
+    loading: "世界のウェブサイトランキングを読み込み中...",
+    loadingProgress: "先に表示",
+    loaded: "読み込み済み",
+    websites: "件のサイト",
+    showing: "表示中",
+    of: "全",
+    matching: "件の結果",
+    noResults: "一致するサイトが見つかりません",
+    allSites: "すべてのサイト",
+    page: "ページ",
+    pageOf: "/ 全",
+    previous: "前へ",
+    next: "次へ",
+    currentView: "現在の表示",
+    tldAll: "すべてのTLD",
+    tldFilter: "TLD",
+    loadError: "データを読み込めませんでした。GitHub Pages では正常に読み込めます。ローカルでは静的サーバーで開いてください。"
+  },
+  ko: {
+    searchPlaceholder: "도메인 검색, 예: google, cloud, edu",
+    loading: "전 세계 웹사이트 순위 데이터를 불러오는 중...",
+    loadingProgress: "먼저 표시",
+    loaded: "불러옴",
+    websites: "개 사이트",
+    showing: "표시 중",
+    of: "전체",
+    matching: "개 결과",
+    noResults: "일치하는 사이트가 없습니다",
+    allSites: "전체 사이트",
+    page: "페이지",
+    pageOf: "/ 전체",
+    previous: "이전",
+    next: "다음",
+    currentView: "현재 보기",
+    tldAll: "모든 TLD",
+    tldFilter: "TLD",
+    loadError: "데이터를 불러오지 못했습니다. GitHub Pages에서는 정상적으로 CSV를 읽을 수 있습니다. 로컬에서는 정적 서버로 열어 주세요."
+  },
+  ru: {
+    searchPlaceholder: "Поиск домена, например google, cloud, edu",
+    loading: "Загрузка мирового рейтинга сайтов...",
+    loadingProgress: "Уже показано",
+    loaded: "Загружено",
+    websites: "сайтов",
+    showing: "Показано",
+    of: "из",
+    matching: "результатов",
+    noResults: "Подходящие сайты не найдены",
+    allSites: "Все сайты",
+    page: "Страница",
+    pageOf: "из",
+    previous: "Назад",
+    next: "Далее",
+    currentView: "Текущий вид",
+    tldAll: "Все TLD",
+    tldFilter: "TLD",
+    loadError: "Не удалось загрузить данные. На GitHub Pages CSV будет читаться корректно; локально откройте сайт через статический сервер."
   }
 };
 
