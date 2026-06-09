@@ -1,0 +1,70 @@
+﻿<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>全球网站排行 - 搜索近百万个网站域名</title>
+  <meta name="description" content="浏览全球网站排行，通过关键词快速搜索域名，发现常用网站、基础设施域名、媒体、工具和学习资源。">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://rankwebs.xyz/zh/">
+  <link rel="alternate" hreflang="zh" href="https://rankwebs.xyz/zh/">
+  <link rel="alternate" hreflang="en" href="https://rankwebs.xyz/en/">
+  <link rel="alternate" hreflang="fr" href="https://rankwebs.xyz/fr/">
+  <link rel="alternate" hreflang="de" href="https://rankwebs.xyz/de/">
+  <link rel="alternate" hreflang="it" href="https://rankwebs.xyz/it/">
+  <link rel="alternate" hreflang="es" href="https://rankwebs.xyz/es/">
+  <link rel="alternate" hreflang="x-default" href="https://rankwebs.xyz/en/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="全球网站排行">
+  <meta property="og:description" content="搜索近百万个网站域名，按全球排行探索互联网。">
+  <meta property="og:url" content="https://rankwebs.xyz/zh/">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"全球网站排行","url":"https://rankwebs.xyz/zh/","potentialAction":{"@type":"SearchAction","target":"https://rankwebs.xyz/zh/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./"><span class="brand-mark">#</span><span>全球网站排行</span></a>
+    <div class="header-actions">
+      <span class="language-label">Language / 语言</span>
+      <select id="language-select" class="language-select" aria-label="切换语言">
+        <option value="zh">中文</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="es">Español</option>
+      </select>
+    </div>
+  </header>
+  <main class="workspace">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Internet directory</p>
+        <h1>搜索全球网站排行</h1>
+        <p class="lead">按排名浏览近百万个域名，从大型平台到基础设施服务，用一个搜索框重新发现互联网的长尾。</p>
+      </div>
+      <div class="summary-strip" aria-label="数据概览">
+        <div class="metric"><span id="total-count" class="metric-value">-</span><span class="metric-label">收录网站</span></div>
+        <div class="metric"><span id="current-view" class="metric-value">-</span><span class="metric-label">当前视图</span></div>
+      </div>
+    </section>
+    <section class="search-panel" aria-label="搜索与筛选">
+      <input id="search" class="search-input" type="search" autocomplete="off" inputmode="search">
+      <div class="controls">
+        <select id="tld-filter" class="filter-select" aria-label="后缀筛选"><option value="">全部后缀</option></select>
+        <select id="page-size" class="page-size" aria-label="每页数量"><option value="50">50</option><option value="100">100</option><option value="200">200</option></select>
+      </div>
+    </section>
+    <section class="results-shell">
+      <div class="results-topbar"><div id="result-status" class="status">正在加载...</div><div class="status">Rank · Domain</div></div>
+      <div id="site-list" class="site-list"></div>
+      <div class="pager"><button id="previous-page" class="button">上一页</button><span id="page-state" class="page-state">-</span><button id="next-page" class="button primary">下一页</button></div>
+    </section>
+    <section class="content-band">
+      <h2>适合探索什么</h2>
+      <div class="content-grid">
+        <article class="content-item"><h3>热门平台</h3><p>快速查看搜索、社交、视频、电商和办公服务在榜单中的相对位置。</p></article>
+        <article class="content-item"><h3>基础设施</h3><p>发现 CDN、云服务、认证、广告、分析和开发者生态中的关键域名。</p></article>
+        <article class="content-item"><h3>学习路径</h3><p>用关键词搜索不同主题，找到资料源、社区、工具站和长期值得关注的网站。</p></article>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">© 2026 全球网站排行</footer>
+  <script src="../assets/app.js" defer></script>
+</body>
+</html>
