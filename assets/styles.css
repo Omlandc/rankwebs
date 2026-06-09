@@ -258,7 +258,7 @@ h1 {
 
 .site-row {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: minmax(7ch, 72px) minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   min-height: 38px;
@@ -374,7 +374,7 @@ h1 {
   }
 
   .site-row {
-    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-columns: minmax(7ch, 70px) minmax(0, 1fr);
   }
 }
 
@@ -416,7 +416,7 @@ h1 {
   }
 
   .site-row {
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: minmax(7ch, 76px) minmax(0, 1fr);
     gap: 8px;
   }
 
