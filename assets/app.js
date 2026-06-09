@@ -4,6 +4,7 @@ const UI = {
   zh: {
     searchPlaceholder: "搜索域名，例如 google、cloud、edu",
     loading: "正在加载全球网站排行数据...",
+    loadingProgress: "已先显示",
     loaded: "已加载",
     websites: "个网站",
     showing: "显示",
@@ -23,6 +24,7 @@ const UI = {
   en: {
     searchPlaceholder: "Search domains, e.g. google, cloud, edu",
     loading: "Loading global website ranking data...",
+    loadingProgress: "Showing",
     loaded: "Loaded",
     websites: "websites",
     showing: "Showing",
@@ -42,6 +44,7 @@ const UI = {
   fr: {
     searchPlaceholder: "Rechercher un domaine, ex. google, cloud, edu",
     loading: "Chargement du classement mondial...",
+    loadingProgress: "Affichage",
     loaded: "Chargé",
     websites: "sites",
     showing: "Affichage",
@@ -61,6 +64,7 @@ const UI = {
   de: {
     searchPlaceholder: "Domains suchen, z. B. google, cloud, edu",
     loading: "Globale Website-Rangliste wird geladen...",
+    loadingProgress: "Zeige",
     loaded: "Geladen",
     websites: "Websites",
     showing: "Zeige",
@@ -80,6 +84,7 @@ const UI = {
   it: {
     searchPlaceholder: "Cerca domini, es. google, cloud, edu",
     loading: "Caricamento classifica globale...",
+    loadingProgress: "Mostra",
     loaded: "Caricati",
     websites: "siti",
     showing: "Mostra",
@@ -99,6 +104,7 @@ const UI = {
   es: {
     searchPlaceholder: "Buscar dominios, p. ej. google, cloud, edu",
     loading: "Cargando ranking global...",
+    loadingProgress: "Mostrando",
     loaded: "Cargados",
     websites: "sitios",
     showing: "Mostrando",
@@ -120,11 +126,13 @@ const UI = {
 const state = {
   domains: [],
   ranks: [],
+  tldCounts: new Map(),
   filtered: null,
   page: 1,
   pageSize: 100,
   query: "",
   tld: "",
+  loadingComplete: false,
   lang: document.documentElement.lang || "en"
 };
 
@@ -162,15 +170,6 @@ function setText(id, text) {
 function updateMetrics() {
   setText("total-count", state.domains.length ? formatNumber(state.domains.length) : "-");
   setText("current-view", getViewLabel());
-}
-
-function computeTldCounts() {
-  const counts = new Map();
-  for (const domain of state.domains) {
-    const tld = getTld(domain);
-    if (tld) counts.set(tld, (counts.get(tld) || 0) + 1);
-  }
-  return counts;
 }
 
 function populateTldFilter(counts) {
@@ -236,7 +235,9 @@ function render() {
   }
 
   const hasFilter = Boolean(state.query || state.tld);
-  const viewText = hasFilter
+  const viewText = !state.loadingComplete && state.domains.length
+    ? `${ui.loadingProgress} ${formatNumber(total)} ${ui.websites}`
+    : hasFilter
     ? `${ui.showing} ${formatNumber(Math.min(total, state.pageSize))} ${ui.of} ${formatNumber(total)} ${ui.matching}`
     : `${ui.loaded} ${formatNumber(state.domains.length)} ${ui.websites}`;
   setText("result-status", viewText);
@@ -254,8 +255,8 @@ function runSearch(query) {
   applyFilters();
 }
 
-function applyFilters() {
-  state.page = 1;
+function applyFilters(resetPage = true) {
+  if (resetPage) state.page = 1;
   if (!state.query && !state.tld) {
     state.filtered = null;
     render();
@@ -329,19 +330,11 @@ async function loadData() {
     const dataUrl = new URL("../全球网站排行20260609.csv", document.baseURI);
     const response = await fetch(dataUrl);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const text = await response.text();
-    applyParsedData(text);
-    const tldCounts = computeTldCounts();
-    populateTldFilter(tldCounts);
-    updateMetrics();
-    const initialQuery = new URLSearchParams(window.location.search).get("q") || "";
-    if (initialQuery) runSearch(initialQuery);
-    else render();
+    await loadDataProgressively(response);
   } catch (error) {
     try {
       await loadDataScriptFallback();
-      const tldCounts = computeTldCounts();
-      populateTldFilter(tldCounts);
+      populateTldFilter(state.tldCounts);
       updateMetrics();
       const initialQuery = new URLSearchParams(window.location.search).get("q") || "";
       if (initialQuery) runSearch(initialQuery);
@@ -382,28 +375,117 @@ function applyParsedData(text) {
   const parsed = parseDomainText(text);
   state.domains = parsed.domains;
   state.ranks = parsed.ranks;
+  state.tldCounts = parsed.tldCounts;
+  state.loadingComplete = true;
 }
 
 function parseDomainText(text) {
   const domains = [];
   const ranks = [];
+  const tldCounts = new Map();
 
   text.split(/\r?\n/).forEach((line, index) => {
-    const value = line.trim().replace(/^\uFEFF/, "");
-    if (!value) return;
-    const comma = value.indexOf(",");
-    if (comma > 0 && /^\d+$/.test(value.slice(0, comma))) {
-      const domain = value.slice(comma + 1).trim().toLowerCase();
-      if (!domain) return;
-      domains.push(domain);
-      ranks.push(Number(value.slice(0, comma)));
-      return;
-    }
-    domains.push(value.toLowerCase());
-    ranks.push(index + 1);
+    const parsed = parseDomainLine(line, index);
+    if (!parsed) return;
+    domains.push(parsed.domain);
+    ranks.push(parsed.rank);
+    addTldCount(tldCounts, parsed.domain);
   });
 
-  return { domains, ranks };
+  return { domains, ranks, tldCounts };
+}
+
+function parseDomainLine(line, index) {
+  const value = line.trim().replace(/^\uFEFF/, "");
+  if (!value) return null;
+  const comma = value.indexOf(",");
+  if (comma > 0 && /^\d+$/.test(value.slice(0, comma))) {
+    const domain = value.slice(comma + 1).trim().toLowerCase();
+    if (!domain) return null;
+    return { domain, rank: Number(value.slice(0, comma)) };
+  }
+  return { domain: value.toLowerCase(), rank: index + 1 };
+}
+
+function addTldCount(counts, domain) {
+  const tld = getTld(domain);
+  if (tld) counts.set(tld, (counts.get(tld) || 0) + 1);
+}
+
+async function loadDataProgressively(response) {
+  if (!response.body || !response.body.getReader) {
+    const text = await response.text();
+    applyParsedData(text);
+    populateTldFilter(state.tldCounts);
+    updateMetrics();
+    const initialQuery = new URLSearchParams(window.location.search).get("q") || "";
+    if (initialQuery) runSearch(initialQuery);
+    else render();
+    return;
+  }
+
+  state.domains = [];
+  state.ranks = [];
+  state.filtered = null;
+  state.tldCounts = new Map();
+  state.loadingComplete = false;
+
+  const initialQuery = new URLSearchParams(window.location.search).get("q") || "";
+  if (initialQuery) state.query = initialQuery.trim().toLowerCase();
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let lineIndex = 0;
+  let lastUpdate = 0;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      const parsed = parseDomainLine(line, lineIndex);
+      lineIndex += 1;
+      if (!parsed) continue;
+      state.domains.push(parsed.domain);
+      state.ranks.push(parsed.rank);
+      addTldCount(state.tldCounts, parsed.domain);
+    }
+
+    const now = performance.now();
+    if (state.domains.length >= state.pageSize && now - lastUpdate > 180) {
+      refreshProgressiveResults();
+      lastUpdate = now;
+    }
+  }
+
+  const tail = decoder.decode();
+  if (tail) buffer += tail;
+  if (buffer.trim()) {
+    const parsed = parseDomainLine(buffer, lineIndex);
+    if (parsed) {
+      state.domains.push(parsed.domain);
+      state.ranks.push(parsed.rank);
+      addTldCount(state.tldCounts, parsed.domain);
+    }
+  }
+
+  state.loadingComplete = true;
+  populateTldFilter(state.tldCounts);
+  updateMetrics();
+  if (state.query || state.tld) applyFilters(false);
+  else render();
+}
+
+function refreshProgressiveResults() {
+  populateTldFilter(state.tldCounts);
+  updateMetrics();
+  if (state.query || state.tld) applyFilters(false);
+  else render();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
