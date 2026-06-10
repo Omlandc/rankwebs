@@ -30,7 +30,7 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir _site
-          cp -R index.html assets zh en fr de it es ja ko ru about privacy contact robots.txt sitemap.xml CNAME "全球网站排行20260609.csv" _site/
+          cp -R index.html assets zh en about privacy contact robots.txt sitemap.xml CNAME "全球网站排行20260609.csv" _site/
           touch _site/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
