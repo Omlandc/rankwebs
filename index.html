@@ -7,13 +7,6 @@
   <meta name="description" content="Browse and search a global ranking of nearly one million websites.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://rankwebs.xyz/en/">
-  <script>
-    const supported = ["zh", "en"];
-    const saved = localStorage.getItem("site-language");
-    const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
-    const lang = supported.includes(saved) ? saved : supported.includes(browser) ? browser : "en";
-    location.replace(`./${lang}/`);
-  </script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4JKLBTSGH"></script>
   <script>
@@ -22,6 +15,15 @@
     gtag('js', new Date());
 
     gtag('config', 'G-H4JKLBTSGH');
+  </script>
+  <script>
+    const supported = ["zh", "en"];
+    const saved = localStorage.getItem("site-language");
+    const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
+    const lang = supported.includes(saved) ? saved : supported.includes(browser) ? browser : "en";
+    window.setTimeout(() => {
+      location.replace(`./${lang}/`);
+    }, 800);
   </script>
 </head>
 <body>
