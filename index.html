@@ -14,6 +14,15 @@
     const lang = supported.includes(saved) ? saved : supported.includes(browser) ? browser : "en";
     location.replace(`./${lang}/`);
   </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4JKLBTSGH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4JKLBTSGH');
+  </script>
 </head>
 <body>
   <p><a href="./en/">Open Global Website Ranking</a></p>
