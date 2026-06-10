@@ -68,6 +68,27 @@ a {
   font-size: 17px;
 }
 
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+}
+
+.primary-nav a {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 720;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.primary-nav a:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -353,19 +374,113 @@ h1 {
   line-height: 1.5;
 }
 
+.guide-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+  gap: 18px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.guide-copy h2,
+.guide-note h2,
+.policy-page h1,
+.policy-page h2 {
+  margin: 0 0 10px;
+  letter-spacing: 0;
+}
+
+.guide-copy p,
+.guide-note p,
+.policy-page p,
+.policy-page li {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.guide-copy p,
+.guide-note p {
+  margin: 0 0 12px;
+}
+
+.guide-note {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.ad-reserve {
+  display: grid;
+  place-items: center;
+  min-height: 90px;
+  margin-top: 14px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.policy-page {
+  width: min(860px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 44px) 0 48px;
+}
+
+.policy-page h1 {
+  font-size: clamp(2rem, 5vw, 3.3rem);
+}
+
+.policy-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.policy-list {
+  padding-left: 20px;
+}
+
+.contact-panel {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
 .site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   padding: 18px clamp(16px, 4vw, 48px);
   border-top: 1px solid var(--line);
   color: var(--muted);
 }
 
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .site-footer a {
   color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 860px) {
   .intro,
-  .content-grid {
+  .content-grid,
+  .guide-band {
     grid-template-columns: 1fr;
   }
 
@@ -382,6 +497,12 @@ h1 {
   .site-header {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .primary-nav {
+    margin-left: 0;
+    overflow-x: auto;
+    padding-bottom: 2px;
   }
 
   .header-actions,
@@ -422,6 +543,11 @@ h1 {
 
   .rank {
     text-align: left;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
 }
